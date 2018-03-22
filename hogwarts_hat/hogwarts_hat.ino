@@ -117,6 +117,7 @@ int playSongFromSD(int songname) {
     int waitingtime1=10000;
     int waitingtime2=20000;
     int waitingtime3=30000;
+    int waitingtimeSleep=7000;
 
     switch(songname){
       case 1: delay(waitingtime1);
@@ -125,46 +126,46 @@ int playSongFromSD(int songname) {
       case 2: delay(waitingtime1);
       break;
 
-      case 3:delay(waitingtime3);
+      case 3:delay(24000);
       break;
 
-      case 4: delay(waitingtime1);
+      case 4: delay(8000);
       break;
 
       case 5: delay(waitingtime1);
       break;
 
-      case 6: delay(waitingtime3);
+      case 6: delay(26000);
       break;
 
       case 7: delay(waitingtime2);
       break;
 
-      case 8: delay(waitingtime1);
+      case 8: delay(13000);
       break;
 
       case 9: delay(waitingtime1);
       break;
 
-      case 10: delay(waitingtime2);
+      case 10: delay(15000);
       break;
 
-      case 11: delay(waitingtime3);
+      case 11: delay(26000);
       break;
 
-      case 12: delay(waitingtime1);
+      case 12: delay(12000);
       break;
 
-      case 13: delay(waitingtime1);
+      case 13: delay(11000);
       break;
 
-      case 14: delay(waitingtime1);
+      case 14: delay(11000);
       break;
 
-      case 15: delay(waitingtime1);
+      case 15: delay(11000);
       break;
 
-      case 16: delay(waitingtime2);
+      case 16: delay(18000);
       break;
 
       case 17: delay(waitingtime1);
@@ -173,19 +174,19 @@ int playSongFromSD(int songname) {
       case 18: delay(waitingtime1);
       break;
 
-      case 19: delay(waitingtime3);
+      case 19: delay(23000);
       break;
 
       case 20: delay(waitingtime3);
       break;
 
-      case 21: delay(waitingtime2);
+      case 21: delay(15000);
       break;
 
       case 22: delay(waitingtime3);
       break;
 
-      case 97: delay(waitingtime1);
+      case 97: delay(waitingtimeSleep);
       break;
 
       case 98: delay(waitingtime1);
@@ -212,7 +213,7 @@ bool isFilePlaying() {
 //**------SENSOR INPUT PART-----///
 //**functions to check sensor input**//
 
-const static long MAX_TOUCH_VALUE=240;
+const static long MAX_TOUCH_VALUE=350;
 const static float MAX_HEAD_SHAKE=1;
 const static float MAX_HEAD_NODDING=1;
 const static int MAX_VALUES =20;
@@ -483,6 +484,38 @@ void hatawakes() {
   playSongFromSD(WELCOME_SOUND);
 }
 
+void testquetions(){
+  int sizes=4;
+ 
+  for(int i=0;i<sizes;i++){
+     Serial.println(question_counter);
+    int questionvalue=666;
+    questionvalue=q_asked_gry[i];
+  Serial.println( "questionvalue gry");
+  Serial.println(questionvalue);
+  
+      questionvalue=q_asked_huf[i];
+        Serial.println( "questionvalue huf");
+       Serial.println(questionvalue);
+
+      
+      questionvalue=q_asked_rav[i];
+        Serial.println( "questionvalue rav");
+       Serial.println(questionvalue);
+
+       
+      questionvalue=q_asked_sly[i];
+       Serial.println( "questionvalue sly");
+       Serial.println(questionvalue);
+
+       
+    }
+  
+  
+  
+  
+  }
+
 
 //**we ask user and are handling his answer yes or no**//
 
@@ -643,8 +676,6 @@ void rememberAskedQuestion(int askedquestion, int house) {
   }
 }
 
-
-
 //**we need to know when the game is over**//
 
 bool stillMoreThanOneHouseLeft() {
@@ -654,6 +685,14 @@ bool stillMoreThanOneHouseLeft() {
     Serial.println("is user stillMoreThanOneHouseLeft");
 
     if (houses[house] != HOUSE_ANSWER_NO) {
+       Serial.print("is user stillMoreThanOneHouseLeft  houses[house] != HOUSE_ANSWER_NO ");
+       Serial.print("house nr ");
+       Serial.println(house);
+       Serial.print("HOUSE_ANSWER_NO" );
+       Serial.println(HOUSE_ANSWER_NO);
+         Serial.print("houses[house]" );
+       Serial.println(houses[house]);
+       
       counter++;
     }
   }
@@ -715,6 +754,7 @@ void resetGame() {
   Serial.println("resetGame");
   resetHouses();
   resetAskedQuestions();
+  resetValues();
 }
 
 
@@ -729,10 +769,10 @@ void resetHouses() {
 
 void resetAskedQuestions() {
   Serial.println("resetAskedQuestions");
-  resetAskedQuestionsPerHouse(questions_gry);
-  resetAskedQuestionsPerHouse(questions_huf);
-  resetAskedQuestionsPerHouse(questions_rav);
-  resetAskedQuestionsPerHouse(questions_sly);
+  resetAskedQuestionsPerHouse(q_asked_gry);
+  resetAskedQuestionsPerHouse(q_asked_huf);
+  resetAskedQuestionsPerHouse(q_asked_rav);
+  resetAskedQuestionsPerHouse(q_asked_sly);
 }
 
 
@@ -740,10 +780,19 @@ void resetAskedQuestions() {
 void resetAskedQuestionsPerHouse(int array[]) {
   int questionsPerHouse = 4;
   for (int i = 0; i < questionsPerHouse; i++) {
+      Serial.print("resetAskedQuestionsPerHouse" );
+       Serial.print(i);
     array[i] = NEW_QUESTION;
   }
 
 }
+
+void resetValues(){
+  question_counter=0;
+  state_house=0;
+
+ 
+  }
 
 
 //**------STATE MACHINE PART-----///
@@ -833,8 +882,9 @@ void stateMachineRun() {
     //GAMEOVER
     case GameState::GAMEOVER:
       Serial.println("GAMEOVER");
-      gameOver();
       state = GameState::DEFAULT_STATE;
+      gameOver();
+      
       break;
 
   }
