@@ -1,4 +1,4 @@
-#The Talking Hat
+# The Talking Hat
 
 The talking hat from the Harry Potter series implemented using an Arduino microcontroller.
 
